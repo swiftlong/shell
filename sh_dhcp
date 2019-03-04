@@ -1,0 +1,17 @@
+#!/bin/bash
+yum -y install dhcp && echo "yum install dhcp success" || echo "yum install failed"
+cd /etc/dhcp && touch test1
+cat>test1<<EOF
+option domain-name "itcast.cc";   			//域名
+option domain-name-servers 192.168.1.110, 8.8.8.8;  //DNS(可以写多个)
+default-lease-time 3600;  		//缺省租约
+max-lease-time 7200;      		//客户端最大租约
+log-facility local7;      		//定义日志设备载体 （/var/log/boot.log输出）
+
+subnet 172.16.0.0 netmask 255.255.255.0 {   //子网<网段>
+  range 172.16.0.100 172.16.0.200;  			//地址范围<地址池>
+  option routers 172.16.0.254;        		//网关
+  option broadcast-address 172.16.0.255  	//广播地址
+}
+mv /etc/dhcp/dhcp.conf{,.bak} && mv /etc/dhcp/{test1,dhcp.conf}
+ 
