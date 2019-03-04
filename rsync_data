@@ -1,0 +1,6 @@
+#!/bin/bash
+/usr/bin/inotify -mry -e modify,delete,create,attrib,move /dir1 |while read events
+	do
+		rsync -a --delete /dir1 /dir2/
+		echo "`date +%F\ %T`出现事件$events" >> /var/log/rsync.log 2>&1
+	done
